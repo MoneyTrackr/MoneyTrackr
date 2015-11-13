@@ -13,7 +13,8 @@ def income_edit(request, income_id):
         income_id = int(income_id)
     except ValueError:
         raise Http404()
-    html = "<html><body>This is my income edit page for income entry no. %s.</body></html>" % (income_id)
+    return render(request, 'income/edit.html', {'income_id': income_id})
+    # html = "<html><body>This is my income edit page for income entry no. %s.</body></html>" % (income_id)
     return HttpResponse(html)
 
 def expense(request):

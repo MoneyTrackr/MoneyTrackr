@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from application.views import income, expense, home, income_new, income_edit, expense_new, expense_edit
+from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
     url(r'^income/$', income),
@@ -24,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^expense/$', expense),
     url(r'^expense/new$', expense_new),
     url(r'^expense/\d+/edit$', expense_edit),
-    url(r'^$', expense),
+    url(r'^$', RedirectView.as_view(url='/expense', permanent=False)),
 )
 
 from django.conf import settings

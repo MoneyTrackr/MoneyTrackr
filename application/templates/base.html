@@ -19,8 +19,8 @@
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Income</a></li>
-          <li><a href="#about">Expenses</a></li>
+          <li class="active"><a href="{{ ROOT_URLCONF }}/income">Income</a></li>
+          <li><a href="{{ ROOT_URLCONF }}/expense">Expenses</a></li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
@@ -30,7 +30,7 @@
     <div class="container">
       {% block content %}{% endblock %}
       {% block footer %}
-        <p>insert footer here</p>
+{#        <p>insert footer here</p>#}
       {% endblock %}
     </div>
   </div>

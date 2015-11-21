@@ -10,16 +10,16 @@ class Account(models.Model):
     name = models.CharField(max_length=30)
 
 class Income(models.Model):
-    date = models.DateTimeField
+    date = models.DateField()
     category = models.ForeignKey(Category)
-    amount = models.FloatField
+    amount = models.FloatField()
     account = models.ForeignKey(Account)
     notes = models.CharField(max_length=50)
 
 class Expense(models.Model):
-    date = models.DateTimeField
+    date = models.DateField()
     category = models.ForeignKey(Category)
-    amount = models.FloatField
+    amount = models.FloatField()
     account = models.ForeignKey(Account)
     notes = models.CharField(max_length=50)
 

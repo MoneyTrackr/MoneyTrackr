@@ -1,56 +1,78 @@
 [
 {
-    "model": "application.category",
     "fields": {
-        "type": "income",
-        "name": "salary"
+        "name": "salary",
+        "type": "income"
     },
+    "model": "application.category",
     "pk": 1
 },
 {
-    "model": "application.category",
     "fields": {
-        "type": "income",
-        "name": "gift"
+        "name": "gift",
+        "type": "income"
     },
+    "model": "application.category",
     "pk": 2
 },
 {
-    "model": "application.category",
     "fields": {
-        "type": "expense",
-        "name": "food"
+        "name": "food",
+        "type": "expense"
     },
+    "model": "application.category",
     "pk": 3
 },
 {
-    "model": "application.category",
     "fields": {
-        "type": "expense",
-        "name": "transportation"
+        "name": "transportation",
+        "type": "expense"
     },
+    "model": "application.category",
     "pk": 4
 },
 {
-    "model": "application.category",
     "fields": {
-        "type": "expense",
-        "name": "others"
+        "name": "others",
+        "type": "expense"
     },
+    "model": "application.category",
     "pk": 5
 },
 {
-    "model": "application.account",
     "fields": {
         "name": "savings"
     },
+    "model": "application.account",
     "pk": 1
 },
 {
-    "model": "application.account",
     "fields": {
         "name": "cash-on-hand"
     },
+    "model": "application.account",
     "pk": 2
+},
+{
+    "fields": {
+        "category": 1,
+        "account": 1,
+        "notes": "November salary",
+        "amount": 100000.0,
+        "date": "2015-11-21"
+    },
+    "model": "application.income",
+    "pk": 2
+},
+{
+    "fields": {
+        "category": 5,
+        "account": 1,
+        "notes": "Movie Tickets",
+        "amount": 100.0,
+        "date": "2015-11-21"
+    },
+    "model": "application.expense",
+    "pk": 1
 }
 ]

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Income List{% endblock %}
+
+{% block content %}
+    <div class = "row">
+        <div class = "col-lg-6">
+            <h2>Income List</h2>
+        </div>
+        <div class = col-lg-6>
+            <div class = "pull-right">
+                <h3><a href="#">Add Income</a></h3>
+            </div>
+        </div>
+    </div>
+
+    {% if income_list %}
+        <table class = "table table-striped table-hover table-responsive">
+            <tr>
+
+                <th>Date</th>
+                <th>Account</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Notes</th>
+                <th></th>
+            </tr>
+
+            {% for income in income_list %}
+                <tr>
+                    <td>{{ income.date }}</td>
+                    <td> {{ income.account.name }}</td>
+                    <td>{{ income.category.name }}</td>
+                    <td>{{ income.amount }}</td>
+                    <td>{{ income.notes }}</td>
+                    <td> <a href="{{ income.id }}/edit">Edit</a> |
+                            <a href="#">Delete</a></td>
+                </tr>
+
+
+                    <div class = "col-lg-2">
+                        <div class = "pull-right">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+    </table>
+
+    {% else %}
+        <p>No income available.</p>
+    {% endif %}
+
+
+{% endblock %}

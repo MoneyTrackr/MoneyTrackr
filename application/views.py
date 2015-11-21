@@ -1,9 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
+from .models import Income
+
+
 # Create your views here.
 
 def income(request):
-    return HttpResponse("This is my income page")
+    income_list = Income.objects.all()
+    return render(request, 'income/list.html', {'income_list': income_list})
 
 def income_new(request):
     return HttpResponse("This is my income new page")

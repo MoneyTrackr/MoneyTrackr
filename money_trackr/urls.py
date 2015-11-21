@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^expense/$', expense),
     url(r'^expense/new$', expense_new),
     url(r'^expense/\d+/edit$', expense_edit),
-    url(r'^$', income),
+    url(r'^$', expense),
 )
 
 from django.conf import settings

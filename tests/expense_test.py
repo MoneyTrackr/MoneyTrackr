@@ -2,7 +2,7 @@
 from selenium import webdriver
 import unittest
 
-class IncomeTest(unittest.TestCase):
+class ExpenseTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -12,9 +12,9 @@ class IncomeTest(unittest.TestCase):
         self.browser.quit()
 
     def test_can_display_the_income_list(self):
-        self.browser.get('http://localhost:8000/income')
+        self.browser.get('http://localhost:8000/expense')
 
-        self.assertIn('Income List', self.browser.title)
+        self.assertIn('Expense List', self.browser.title)
         self.fail('Finish the test!')
 
 

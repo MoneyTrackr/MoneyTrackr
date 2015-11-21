@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .models import Income
+from .models import Expense
 
 
 # Create your views here.
@@ -22,7 +23,9 @@ def income_edit(request, income_id):
     return HttpResponse(html)
 
 def expense(request):
-    return HttpResponse("This is my expense page")
+    expense_list = Expense.objects.all()
+    return render(request, 'expense/list.html', {'expense_list': expense_list})
+
 
 def expense_new(request):
     return HttpResponse("This is my expense new page")

@@ -9,7 +9,7 @@
         </div>
         <div class = col-lg-6>
             <div class = "pull-right">
-                <h3><a href="#">Add Income</a></h3>
+                <h3><a href="new">Add Income</a></h3>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
                     <td>{{ income.amount }}</td>
                     <td>{{ income.notes }}</td>
                     <td> <a href="{{ income.id }}/edit">Edit</a> |
-                            <a href="#">Delete</a></td>
+                             <a href="{{income.id}}/delete", id="delete-income-{{income.id }}", onclick="return confirm('Are you sure want to delete this item?');">Delete</a>
                 </tr>
 
 

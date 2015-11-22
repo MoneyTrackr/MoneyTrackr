@@ -12,7 +12,7 @@ def income(request):
     return render(request, 'income/list.html', {'income_list': income_list})
 
 def income_new(request):
-    return HttpResponse("This is my income new page")
+     return render(request, 'income/new.html')
 
 def income_edit(request, income_id):
     try:
@@ -20,6 +20,17 @@ def income_edit(request, income_id):
     except ValueError:
         raise Http404()
     return render(request, 'income/edit.html', {'income_id': income_id})
+
+def income_delete(request, income_id):
+    try:
+        income_id = int(income_id)
+        income = Income.objects.filter(id=income_id)
+        if income.exists():
+            income.delete()
+    except ValueError:
+        raise Http404()
+    return HttpResponseRedirect('/income')
+
 
 def expense(request):
     expense_list = Expense.objects.all()

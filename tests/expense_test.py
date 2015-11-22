@@ -15,7 +15,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
 
-        category = Category(name="salary", type="income")
+        category = Category(name="others", type="expense")
         category.save()
 
         account = Account(name="savings")
@@ -34,7 +34,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('Expense List', self.browser.title)
         self.assertIn('gift', self.browser.page_source)
         self.assertIn('savings', self.browser.page_source)
-        self.assertIn('salary', self.browser.page_source)
+        self.assertIn('others', self.browser.page_source)
         self.assertIn('1000', self.browser.page_source)
 
 
@@ -61,7 +61,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.browser.implicitly_wait(3)
         self.assertNotIn('gift', self.browser.page_source)
         self.assertNotIn('savings', self.browser.page_source)
-        self.assertNotIn('salary', self.browser.page_source)
+        self.assertNotIn('others', self.browser.page_source)
         self.assertNotIn('1000', self.browser.page_source)
 
     def test_cancels_delete_of_an_epxense_item(self):
@@ -76,7 +76,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.browser.implicitly_wait(20)
         self.assertIn('gift', self.browser.page_source)
         self.assertIn('savings', self.browser.page_source)
-        self.assertIn('salary', self.browser.page_source)
+        self.assertIn('others', self.browser.page_source)
         self.assertIn('1000', self.browser.page_source)
 
 

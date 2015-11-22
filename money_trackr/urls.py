@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, patterns, url
 from django.contrib import admin
-from application.views import income, expense, home, income_new, income_edit, expense_new, expense_edit
+from application.views import income, expense, home, income_new, income_edit, expense_delete, expense_new, expense_edit
 from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
     url(r'^income/$', income),
     url(r'^income/new$', income_new),
     url(r'^income/(\d+)/edit$', income_edit),
+    url(r'^expense/(\d+)/delete', expense_delete),
     url(r'^expense/$', expense),
     url(r'^expense/new$', expense_new),
     url(r'^expense/\d+/edit$', expense_edit),

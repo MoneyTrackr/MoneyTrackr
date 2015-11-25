@@ -2,6 +2,33 @@
 
 {% block title %}New Expense{% endblock %}
 
-{% block content %}
-<p>This is my new expense page.</p>
+{% block content %}<p></p>
+<form method="post" action="">
+      {% csrf_token %}
+	<div class="field">
+                <label for="id_date">Date:</label>
+                {{ portpolio_form.date}}
+                <input type="text">
+        <div class="field">
+                <label for="id_category">Category:</label>
+                {{ portpolio_form.category}}
+		<input type="text">
+        </div>
+        <div class="field">
+                <label for="id_amount">Amount:</label>
+                {{ portpolio_form.amount}}
+		<input type="text">
+        </div>
+        <div class="field">
+                <label for="id_Account">Account:</label>
+                {{ portpolio_form.account}}
+		<input type="text">
+        </div>
+        <div class="field">
+                <label for="id_notes">Notes:</label>
+                {{ portpolio_form.notes}}
+		<input type="text">
+        </div>
+        <input type="submit" value="Add">
+</form>
 {% endblock %}

@@ -59,10 +59,21 @@ def income_delete(request, income_id):
         raise Http404()
     return HttpResponseRedirect('/income')
 
+#create new method for add_expense_link
 
 def expense(request):
     expense_list = Expense.objects.all()
     return render(request, 'expense/list.html', {'expense_list': expense_list})
+
+def expense_new(request):
+    return render(request, 'expense/new.html')
+
+def expense_edit(request):
+    try:
+        expense_id = 1
+    except ValueError:
+        raise Http404()
+    return render(request, 'expense/edit.html', {'expense_id': expense_id})
 
 def expense_delete(request, expense_id):
     try:
@@ -73,13 +84,6 @@ def expense_delete(request, expense_id):
     except ValueError:
         raise Http404()
     return HttpResponseRedirect('/')
-
-def expense_new(request):
-    return render(request, 'expense/new.html')
-
-
-def expense_edit(request):
-    return HttpResponse("This is my expense edit page")
 
 def home(request):
     return HttpResponse("This is my home page")

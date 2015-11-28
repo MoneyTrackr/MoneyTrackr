@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Expense List{% endblock %}
+
+{% block content %}
+    <div class = "row">
+        <div class = "col-lg-6">
+            <h2>Edit Expense</h2>
+        </div>
+        <div class = col-lg-6>
+            <div class = "pull-right">
+                <h3>&nbsp;</h3>
+            </div>
+        </div>
+    </div>
+
+
+        <table class = "table table-striped table-hover table-responsive">
+            <tr>
+
+                <th>Date</th>
+                <th>Account</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Notes</th>
+                <th></th>
+            </tr>
+
+            {% if expense_id %}
+                <tr><form method="post" action="">
+                    <td><input type="text" name="date" value="{{ expense.date }}"> </td>
+                    <td><input type="text" name="account" value="{{ expense.account.name }}"> </td>
+                    <td><input type="text" name="category" value="{{ expense.category.name }}"></td>
+                    <td><input type="text" name="amount" value="{{ expense.amount }}"></td>
+                    <td><input type="text" name="notes" value="{{ expense.notes }}"></td>
+                    <td> 
+                          <input type="submit" value="Submit">
+                       
+                  </td>
+                   </form>
+                </tr>
+
+                    <div class = "col-lg-2">
+                        <div class = "pull-right">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endif %}
+    </table>
+
+
+
+
+{% endblock %}

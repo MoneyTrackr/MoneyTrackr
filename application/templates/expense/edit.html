@@ -27,15 +27,15 @@
             </tr>
 
             {% if expense %}
-                <tr><form method="post" action="">
+                <tr><form method="post" action="">{% csrf_token %}
                     <td><input type="text" name="date" value="{{ expense.date }}"> </td>
                     <td><input type="text" name="account" value="{{ expense.account.name }}"> </td>
                     <td><input type="text" name="category" value="{{ expense.category.name }}"></td>
                     <td><input type="text" name="amount" value="{{ expense.amount }}"></td>
                     <td><input type="text" name="notes" value="{{ expense.notes }}"></td>
-                    <td> 
+                    <td>
                           <input type="submit" value="Submit">
-                       
+
                   </td>
                    </form>
                 </tr>

@@ -26,7 +26,7 @@
                 <th></th>
             </tr>
 
-            {% if expense_id %}
+            {% if expense %}
                 <tr><form method="post" action="">
                     <td><input type="text" name="date" value="{{ expense.date }}"> </td>
                     <td><input type="text" name="account" value="{{ expense.account.name }}"> </td>

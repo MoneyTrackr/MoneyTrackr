@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^expense/(\d+)/delete', expense_delete),
     url(r'^expense/$', expense),
     url(r'^expense/new$', expense_new),
-    url(r'^expense/\d+/edit$', expense_edit),
+    url(r'^expense/(\d+)/edit$', expense_edit),
     url(r'^$', RedirectView.as_view(url='/expense', permanent=False)),
 )
 

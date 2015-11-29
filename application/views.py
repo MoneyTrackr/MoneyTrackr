@@ -68,12 +68,13 @@ def expense(request):
 def expense_new(request):
     return render(request, 'expense/new.html')
 
-def expense_edit(request):
+def expense_edit(request, expense_id):
     try:
-        expense_id = 1
+        expense_id = int(expense_id)
+        expense = Expense.objects.get(id=expense_id)
     except ValueError:
         raise Http404()
-    return render(request, 'expense/edit.html', {'expense_id': expense_id})
+    return render(request, 'expense/edit.html', {'expense': expense})
 
 def expense_delete(request, expense_id):
     try:

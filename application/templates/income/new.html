@@ -5,25 +5,10 @@
 {% block content %}
 
 <p><h3>Add Income Form</h3></p>
-<form action="/admin/" method="post">
-	<div>Date <input type="text" name="date"></div>
-	<div>Account 
-		<select>
-			{% for account in account_list %}
-				<option value="{{account.id}}">{{account.name}}</option>
-			{% endfor %}
-		</select>
-	</div>
-	<div>Category 
-		<select>
-			{% for category in category_list %}
-				<option value="{{category.id}}">{{category.name}}</option>
-			{% endfor %}
-		</select>
-	</div>
-	<div>Amount <input type="text" name="amount"></div>
-	<div>Notes <input type="text" name="notes"></div>
+
+<form method="POST" class="post-form">{% csrf_token %}
+    {{ form.as_p }}
 	<br>
-	<div><input type="submit"> <input type="button" value="Cancel"></div>
+	<div><input type="submit"> <input type="button" value="Cancel" onclick="window.location='http://localhost:8000/income/'"></div>
 </form>
 {% endblock %}

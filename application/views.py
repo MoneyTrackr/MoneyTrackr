@@ -4,8 +4,8 @@ from .models import Income
 from .models import Expense
 from .models import Category
 from .models import Account
+from .forms import NewIncomeForm
 from django.views.generic.base import RedirectView
-
 
 # Create your views here.
 
@@ -14,17 +14,16 @@ def income(request):
     return render(request, 'income/list.html', {'income_list': income_list})
 
 def income_new(request):
-    # try:
-        # date = models.DateField()
-        # category = models.ForeignKey(Category)
-        # amount = models.FloatField()
-        # account = models.ForeignKey(Account)
-        # notes = models.CharField(max_length=50)
-     account_list = Account.objects.all()
-     category_list = Category.objects.filter(type="income")
+    post = Income()
 
-
-     return render(request, 'income/new.html', {'category_list' : category_list, 'account_list' : account_list})
+    if request.method == "POST":
+        form = NewIncomeForm(request.POST, instance=post)
+        if form.is_valid():
+            post.save()
+            return HttpResponseRedirect('/income')
+    else:
+        form = NewIncomeForm()
+    return render(request, 'income/new.html', {'form': form})
 
 def income_edit(request, income_id):
     try:

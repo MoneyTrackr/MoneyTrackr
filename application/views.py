@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from .models import Income
 from .models import Expense
+from .models import Category
+from .models import Account
 from django.views.generic.base import RedirectView
 
 
@@ -12,7 +14,17 @@ def income(request):
     return render(request, 'income/list.html', {'income_list': income_list})
 
 def income_new(request):
-     return render(request, 'income/new.html')
+    # try:
+        # date = models.DateField()
+        # category = models.ForeignKey(Category)
+        # amount = models.FloatField()
+        # account = models.ForeignKey(Account)
+        # notes = models.CharField(max_length=50)
+     account_list = Account.objects.all()
+     category_list = Category.objects.filter(type="income")
+
+
+     return render(request, 'income/new.html', {'category_list' : category_list, 'account_list' : account_list})
 
 def income_edit(request, income_id):
     try:

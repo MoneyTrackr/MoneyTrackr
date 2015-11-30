@@ -3,11 +3,24 @@
 {% block title %}New Income{% endblock %}
 
 {% block content %}
-<p>This is my new income page.</p>
-<form>
+
+<p><h3>Add Income Form</h3></p>
+<form action="/admin/" method="post">
 	<div>Date <input type="text" name="date"></div>
-	<div>Account <input type="text" name="account"></div>
-	<div>Category <input type="text" name="category"></div>
+	<div>Account 
+		<select>
+			{% for account in account_list %}
+				<option value="{{account.id}}">{{account.name}}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div>Category 
+		<select>
+			{% for category in category_list %}
+				<option value="{{category.id}}">{{category.name}}</option>
+			{% endfor %}
+		</select>
+	</div>
 	<div>Amount <input type="text" name="amount"></div>
 	<div>Notes <input type="text" name="notes"></div>
 	<br>

@@ -5,6 +5,7 @@ from .models import Expense
 from .models import Category
 from .models import Account
 from .forms import NewIncomeForm
+from .forms import NewExpenseForm
 from django.views.generic.base import RedirectView
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
@@ -66,7 +67,16 @@ def expense(request):
     return render(request, 'expense/list.html', {'expense_list': expense_list})
 
 def expense_new(request):
-    return render(request, 'expense/new.html')
+    post = Expense()
+
+    if request.method == "POST":
+        form = NewExpenseForm(request.POST, instance=post)
+        if form.is_valid():
+            post.save()
+            return HttpResponseRedirect('/expense')
+    else:
+        form = NewExpenseForm()
+    return render(request, 'expense/new.html', {'form': form})
 
 def expense_edit(request, expense_id):
     try:

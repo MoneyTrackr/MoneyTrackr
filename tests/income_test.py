@@ -39,14 +39,33 @@ class IncomeTest(StaticLiveServerTestCase):
 
     def test_can_visit_add_income_page(self):
         self.browser.get('http://localhost:8081/income')
-        add_expense_link = self.browser.find_element_by_link_text('Add Income')
-        add_expense_link.click()
+        add_income_link = self.browser.find_element_by_link_text('Add Income')
+        add_income_link.click()
         self.browser.implicitly_wait(10)
 
-        self.assertIn('New Income', self.browser.title)
-        self.assertIn('This is my new income page.', self.browser.page_source)
-        self.fail('Finish the test!')
+    def test_can_submit_add_income(self):
+        self.browser.get('http://localhost:8081/income/new')
 
+        self.assertIn('Date:', self.browser.page_source)
+        self.browser.find_element_by_id('id_date')
+        self.assertIn('Category:', self.browser.page_source)
+        self.browser.find_element_by_id('id_category')
+        self.assertIn('Amount:', self.browser.page_source)
+        self.browser.find_element_by_id('id_amount')
+        self.assertIn('Account:', self.browser.page_source)
+        self.browser.find_element_by_id('id_account')
+        self.assertIn('Notes:', self.browser.page_source)
+        self.browser.find_element_by_id('id_notes')
+
+        submit_income_button = self.browser.find_element_by_id('id_submit_income')
+        submit_income_button.click()
+        self.browser.implicitly_wait(20)
+
+    def test_can_cancel_add_income(self):
+        self.browser.get('http://localhost:8081/income/new')
+        cancel_income_button = self.browser.find_element_by_id('id_cancel_income')
+        cancel_income_button.click()
+        self.assertIn('Income List', self.browser.title)
 
     def test_can_delete_an_income_item(self):
         income = Income.objects.latest('id')

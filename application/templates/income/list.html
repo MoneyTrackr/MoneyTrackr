@@ -33,7 +33,7 @@
                     <td>{{ income.category.name }}</td>
                     <td>{{ income.amount }}</td>
                     <td>{{ income.notes }}</td>
-                    <td> <a href="{{ income.id }}/edit">Edit</a> |
+                    <td> <a href="{{income.id}}/edit", id="edit-income-{{income.id }}">Edit</a> |
                              <a href="{{income.id}}/delete", id="delete-income-{{income.id }}", onclick="return confirm('Are you sure want to delete this item?');">Delete</a>
                 </tr>
 

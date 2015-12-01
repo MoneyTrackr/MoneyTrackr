@@ -99,7 +99,36 @@ class IncomeTest(StaticLiveServerTestCase):
         self.assertIn('salary', self.browser.page_source)
         self.assertIn('100000', self.browser.page_source)
 
+    def test_can_submit_edit_income(self):
+        income = Income.objects.latest('id')
+        self.browser.get('http://localhost:8081/income')
+        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
+        edit_income_link.click()
 
+        self.assertIn('Date:', self.browser.page_source)
+        self.browser.find_element_by_id('id_date')
+        self.assertIn('Category:', self.browser.page_source)
+        self.browser.find_element_by_id('id_category')
+        self.assertIn('Amount:', self.browser.page_source)
+        self.browser.find_element_by_id('id_amount')
+        self.assertIn('Account:', self.browser.page_source)
+        self.browser.find_element_by_id('id_account')
+        self.assertIn('Notes:', self.browser.page_source)
+        self.browser.find_element_by_id('id_notes')
+
+        submit_income_button = self.browser.find_element_by_id('id_submit_income')
+        submit_income_button.click()
+        self.browser.implicitly_wait(20)
+
+    def test_can_cancel_edit_income(self):
+        income = Income.objects.latest('id')
+        self.browser.get('http://localhost:8081/income')
+        cancel_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
+        cancel_income_link.click()
+
+        cancel_income_button = self.browser.find_element_by_id('id_cancel_income')
+        cancel_income_button.click()
+        self.assertIn('Income List', self.browser.title)
 
 
 

@@ -3,6 +3,7 @@
 {% block title %}Edit Income{% endblock %}
 
 {% block content %}
+<p><h3>Edit Income</h3></p>
 <form method="POST" class="post-form">{% csrf_token %}
     {{ form.as_p }}
 	<br>

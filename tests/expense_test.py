@@ -130,6 +130,30 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertNotIn('family treat', self.browser.page_source)
 
 
+   def test_add_expense_valid_data(self):
+      form = NewExpenseForm(
+            'date': "2015-12-01",
+            'category': "food",
+            'amount': "100.0",
+            'account': "savings",
+            'notes': "none",                 
+    }, entry=self.entry)		
+    self.assertTrue(form.is_valid())
+    Expense = form.save()
+    self.assertEqual(Expense.date, "2015-12-01")
+    self.assertEqual(Expense.category, "food")
+    self.assertEqual(Expense.amount, "100.0")
+    self.assertEqual(Expense.account, "savings")
+    self.assertEqual(Expense.notes, "none")
+    self.assertEqual(Expense.entry, self.entry)
 
-
-
+    def test_add_expense_blank_data(self):
+        form = NewExpenseForm({}, entry=self.entry)
+        self.assertFalse(form.is_valid())
+        self.assettEqual(form.errors,{
+            'date': ['required']',
+            'category': ['required']',
+            'amount': ['required']',
+            'account': ['required']',
+            'notes': ['required']',
+        })

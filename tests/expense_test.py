@@ -48,7 +48,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('Add Expense Form', self.browser.page_source)
 
 
-    def test_can_delete_an_epxense_item(self):
+    def test_can_delete_an_expense_item(self):
         expense = Expense.objects.latest('id')
         self.browser.get('http://localhost:8081/expense')
         delete_expense_link = self.browser.find_element_by_id("delete-expense-"+ str(expense.id))
@@ -63,7 +63,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertNotIn('others', self.browser.page_source)
         self.assertNotIn('1000', self.browser.page_source)
 
-    def test_cancels_delete_of_an_epxense_item(self):
+    def test_cancels_delete_of_an_expense_item(self):
         expense = Expense.objects.latest('id')
         self.browser.get('http://localhost:8081/expense')
         delete_expense_link = self.browser.find_element_by_id("delete-expense-"+ str(expense.id))
@@ -78,7 +78,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('others', self.browser.page_source)
         self.assertIn('1000', self.browser.page_source)
 
-    def test_can_add_income_successfully(self):
+    def test_can_add_expense_successfully(self):
         self.browser.get('http://localhost:8081/expense/new')
         input_date =  self.browser.find_element_by_id('id_date')
         input_date.send_keys('12/25/2015')
@@ -106,7 +106,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('others', self.browser.page_source)
         self.assertIn('100', self.browser.page_source)
 
-    def test_can_add_income_successfully(self):
+    def test_cancels_add_expense_successfully(self):
         self.browser.get('http://localhost:8081/expense/new')
         input_date =  self.browser.find_element_by_id('id_date')
         input_date.send_keys('12/25/2015')
@@ -128,6 +128,95 @@ class ExpenseTest(StaticLiveServerTestCase):
 
         self.assertIn('Expense List', self.browser.title)
         self.assertNotIn('family treat', self.browser.page_source)
+
+    def test_can_visit_edit_expense_page_(self):
+        self.browser.get('http://localhost:8081/expense/edit')
+        dd_expense_link = self.browser.find_element_by_link_text('Edit Expense')
+        edit_expense_link.click()
+        self.browser.implicitly_wait(10)
+
+        self.assertIn('New Expense', self.browser.title)
+        self.assertIn('Add Expense Form', self.browser.page_source)
+        
+    def test_can_update_expense_from_user_edit(self):
+        self.browser.get('http://localhost:8081/expense/')
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        update_expense_button = self.browser.find_element_by_id('id_submit_expense')
+        update_expense_button.click()
+
+        self.assertIn('Expense List', self.browser.title)
+
+        self.assertIn('Expense List', self.browser.title)
+        self.assertIn('family treat', self.browser.page_source)
+        self.assertIn('savings', self.browser.page_source)
+        self.assertIn('others', self.browser.page_source)
+        self.assertIn('100', self.browser.page_source)
+        
+    def test_cancels_update_expense(self):
+        self.browser.get('http://localhost:8081/expense/edit')
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        cancel_expense_button = self.browser.find_element_by_id('id_cancel_expense')
+        cancel_expense_button.click()
+
+        self.assertIn('Expense List', self.browser.title)
+        self.assertNotIn('family treat', self.browser.page_source)
+
+    def test_system_notify_user_of_correct_update(self):
+        self.browser.get('http://localhost:8081/expense/edit')
+        self.assertIn('The expense update list has been updated', response.content)
+
+    def test_blank_fields_when_submit(self):
+        self.browser.get(self.server_url) 
+        self.browser.find_element_by_id('id_submit_expense').send_keys('\n')
+        error = self.browser.find_element_by_css_selector('has-error')
+        self.assertEqual(error.text, "You can't have an empty list item")
+        self.browser.find_element_by_id('id_date').send_keys('\n')
+        self.check_for_row_in_list_table('12/25/2015')
+        error = self.browser.find_element_by_css_selector('has-error')
+        self.assertEqual(error.text, "You can't have an empty list item")
+        self.browser.find_element_by_id('id_category').send_keys('\n')
+        self.check_for_row_in_list_table('others')
+        error = self.browser.find_element_by_css_selector('has-error')
+        self.assertEqual(error.text, "You can't have an empty list item")
+        self.browser.find_element_by_id('id_account').send_keys('\n')
+        self.check_for_row_in_list_table('savings')
+        error = self.browser.find_element_by_css_selector('has-error')
+        self.assertEqual(error.text, "You can't have an empty list item")
+        self.browser.find_element_by_id('id_notes').send_keys('\n')
+        self.check_for_row_in_list_table('family treat')
+                
+
+
+
+    
 
 
    def test_add_expense_valid_data(self):

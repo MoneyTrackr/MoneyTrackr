@@ -52,12 +52,12 @@
             <div class="col-lg-6">
                 <label for="notes">Notes:</label>
                 {{ form.notes.errors }}
-                <input id="id_notes", name="notes", type="text" placeholder="Notes" aria-describedby="basic-addon1">
+                <input id="id_notes", name="notes", type="text" class="form-control" placeholder="Notes" aria-describedby="basic-addon1">
             </div>
         </div>
 
     </table>
 	<br>
-	<div><input type="submit" id="id_submit_expense"> <input type="button" value="Cancel" onclick="window.location='http://localhost:8000/expense/'" id="id_cancel_expense"></div>
+	<div><input type="submit" id="id_submit_expense"> <input type="button" value="Cancel" onclick="location.href='/expense'" id="id_cancel_expense"></div>
 </form>
 {% endblock %}

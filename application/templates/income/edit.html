@@ -3,5 +3,9 @@
 {% block title %}Edit Income{% endblock %}
 
 {% block content %}
-<p>This is my income edit page for income entry no. {{ income_id }}.</p>
+<form method="POST" class="post-form">{% csrf_token %}
+    {{ form.as_p }}
+	<br>
+	<div><input type="submit" id="id_submit_income"> <input type="button" value="Cancel" onclick="window.location='http://localhost:8000/income/'" id="id_cancel_income"></div>
+</form>
 {% endblock %}

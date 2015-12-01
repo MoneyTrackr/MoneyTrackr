@@ -6,6 +6,10 @@ from .models import Category
 from .models import Account
 from .forms import NewIncomeForm
 from django.views.generic.base import RedirectView
+from django.shortcuts import get_object_or_404
+from django.template import RequestContext
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
 
 # Create your views here.
 
@@ -26,11 +30,24 @@ def income_new(request):
     return render(request, 'income/new.html', {'form': form})
 
 def income_edit(request, income_id):
-    try:
-        income_id = int(income_id)
-    except ValueError:
-        raise Http404()
-    return render(request, 'income/edit.html', {'income_id': income_id})
+    income_id = int(income_id)
+    post = get_object_or_404(Income,id=income_id)
+    
+    if request.method == "POST":
+        form = NewIncomeForm(request.POST, instance=post)
+        if form.is_valid():
+            #post = form.save(commit=False)
+            post.save()
+            return HttpResponseRedirect('/income')
+    else:
+        form = NewIncomeForm(instance=post)
+    return render(request, 'income/edit.html', {'form': form})
+    
+    #try:
+    #    income_id = int(income_id)
+    #except ValueError:
+    #    raise Http404()
+    #return render(request, 'income/edit.html', {'income_id': income_id})
 
 def income_delete(request, income_id):
     try:

@@ -26,6 +26,7 @@ class IncomeTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
+#1 List
     def test_can_display_the_income_list(self):
 
         self.browser.get('http://localhost:8081/income')
@@ -36,13 +37,14 @@ class IncomeTest(StaticLiveServerTestCase):
         self.assertIn('salary', self.browser.page_source)
         self.assertIn('100000', self.browser.page_source)
 
-
+#2 Add
     def test_can_visit_add_income_page(self):
         self.browser.get('http://localhost:8081/income')
         add_income_link = self.browser.find_element_by_link_text('Add Income')
         add_income_link.click()
         #self.browser.implicitly_wait(10)
 
+#3 Add
     def test_can_submit_add_income(self):
         self.browser.get('http://localhost:8081/income/new')
 
@@ -61,12 +63,94 @@ class IncomeTest(StaticLiveServerTestCase):
         submit_income_button.click()
         self.browser.implicitly_wait(20)
 
+#4 Add
     def test_can_cancel_add_income(self):
         self.browser.get('http://localhost:8081/income/new')
         cancel_income_button = self.browser.find_element_by_id('id_cancel_income')
         cancel_income_button.click()
         #self.assertIn('Income List', self.browser.title)
 
+    def test_detects_date_is_invalid_on_add(self):
+        self.browser.get('http://localhost:8081/income/new')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#5 Add
+    def test_detects_category_is_invalid_on_add(self):
+        self.browser.get('http://localhost:8081/income/new')
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#6 Add
+    def test_detects_amount_is_invalid_on_add(self):
+        self.browser.get('http://localhost:8081/income/new')
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#7 Add
+    def test_detects_account_is_invalid_on_add(self):
+        self.browser.get('http://localhost:8081/income/new')
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_income_expense')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#8 Delete
     def test_can_delete_an_income_item(self):
         income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
@@ -84,6 +168,7 @@ class IncomeTest(StaticLiveServerTestCase):
         self.assertNotIn('salary', self.browser.page_source)
         self.assertNotIn('1000000', self.browser.page_source)
 
+#9 Delete
     def test_cancels_delete_of_an_income_item(self):
         income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
@@ -99,7 +184,7 @@ class IncomeTest(StaticLiveServerTestCase):
         self.assertIn('salary', self.browser.page_source)
         self.assertIn('100000', self.browser.page_source)
 
-# Can submit edited income with valid values
+#10 Edit
     def test_can_submit_edit_income(self):
         income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
@@ -121,7 +206,7 @@ class IncomeTest(StaticLiveServerTestCase):
         submit_income_button.click()
         self.browser.implicitly_wait(20)
 
-# Can cancel edited edit forms
+#11 Edit
     def test_can_cancel_edit_income(self):
         income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
@@ -132,72 +217,130 @@ class IncomeTest(StaticLiveServerTestCase):
         cancel_income_button.click()
         #self.assertIn('Income List', self.browser.title)
 
-# Account and Category are empty
-    def test_valid_form_acct_category(self):
-        income = Income.objects.create(date='2015-12-11', amount='100', notes='test')
-        data = {'date': income.date, 'amount': income.amount, 'notes': income.notes}
-        form = IncomeForm(data=data)
-        self.assertTrue(form.is_valid())
-
-# Incorrect date format
-    def test_valid_form_invalid_date(self):
-        income = Income.objects.create(date='2015/12/11', amount='100', notes='test')
-        data = {'date': income.date, 'amount': income.amount, 'notes': income.notes}
-        form = IncomeForm(data=data)
-        self.assertTrue(form.is_valid())
-
-# Post empty form
-    def test_for_invalid_input_renders_list_template(self):
-        response = self.post_invalid_input()
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'list.html') 
-
-# Invalid_input_shows_error_on_page
-    def test_for_invalid_input_shows_error_on_page(self):
-        response = self.post_invalid_input()
-        self.assertContains(response, escape(EMPTY_ITEM_ERROR))
-
-# Account and Category are empty on edit
-    def test_valid_form_acct_category_edit(self):
-        inc = Income.objects.latest('id')
+#12 Edit
+    def test_detects_date_is_invalid_on_edit(self):
+        income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
-        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(inc.id))
+        cancel_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
+        cancel_income_link.click()
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('salary')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('10000')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('from salary')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+        self.assertIn('This field is required', self.browser.page_source)
+
+#13 Edit
+
+    def test_detects_date_is_invalid_on_edit(self):
+        income = Income.objects.latest('id')
+        self.browser.get('http://localhost:8081/income')
+        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
         edit_income_link.click()
 
-        income = Income.objects.create(date='2015-12-11', amount='100', notes='test')
-        data = {'date': income.date, 'amount': income.amount, 'notes': income.notes}
-        form = IncomeForm(data=data)
-        self.assertTrue(form.is_valid())
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
 
-# Incorrect date format on edit
-    def test_valid_form_invalid_date_edit(self):
-        inc = Income.objects.latest('id')
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('salary')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('10000')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('from salary')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#14 Edit
+
+    def test_detects_category_is_invalid_on_edit(self):
+        income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
-        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(inc.id))
+        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
         edit_income_link.click()
 
-        income = Income.objects.create(date='2015/12/11', amount='100', notes='test')
-        data = {'date': income.date, 'amount': income.amount, 'notes': income.notes}
-        form = IncomeForm(data=data)
-        self.assertTrue(form.is_valid())
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
 
-# Post empty form on edit
-    def test_for_invalid_input_renders_list_template_edit(self):
-        inc = Income.objects.latest('id')
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#15 Edit
+
+    def test_detects_amount_is_invalid_on_edit(self):
+        income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
-        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(inc.id))
+        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
         edit_income_link.click()
 
-        response = self.post_invalid_input()
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'list.html') 
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
 
-# Invalid_input_shows_error_on_page on edit
-    def test_for_invalid_input_shows_error_on_page_edit(self):
-        inc = Income.objects.latest('id')
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+
+#16 Edit
+
+    def test_detects_account_is_invalid_on_add(self):
+        income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
-        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(inc.id))
+        edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))
         edit_income_link.click()
 
-        response = self.post_invalid_input()
-        self.assertContains(response, escape(EMPTY_ITEM_ERROR))
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)

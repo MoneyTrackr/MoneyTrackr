@@ -7,66 +7,7 @@
 <p><h3>Add Income Form</h3></p>
 
 <form method="POST" class="post-form">{% csrf_token %}
-    <table>
-        <div class="row field">
-            <div class="col-lg-6">
-                <label for="date">Date:</label>
-                {{ form.date.errors }}
-                <input id="id_date", name="date", type="date" class="form-control" placeholder="Date" aria-describedby="basic-addon1">
-            </div>
-        </div>
-
-        <div class="row field">
-            <div class="col-lg-6">
-                <label for="category">Category:</label>
-                {{ form.category.errors }}
-                <select id="id_category" name="category" class="form-control">
-                    {% for x,y in form.fields.category.choices %}
-                        <option value={{ x }}>{{y}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="row field">
-           <div class="col-lg-6">
-                <label for="amount">Amount:</label>
-                {{ form.amount.errors }}
-                <input id="id_amount", name="amount", type="text" class="form-control" placeholder="Amount" aria-describedby="basic-addon1">
-           </div>
-        </div>
-
-        <div class="row field">
-           <div class="col-lg-6">
-                <label for="account">Account:</label>
-                {{ form.account.errors }}
-                <select id="id_account" name="account" class="form-control">
-                    {% for x,y in form.fields.account.choices %}
-                        <option value={{ x }}>{{y}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-
-        <div class="row field">
-            <div class="col-lg-6">
-                <label for="notes">Notes:</label>
-                {{ form.notes.errors }}
-                <input id="id_notes", name="notes", type="text" class="form-control" placeholder="Notes" aria-describedby="basic-addon1">
-            </div>
-        </div>
-
-{#        <div class="field">#}
-{#            {{ form.email.errors }}#}
-{#            <label for="id_email">Your e-mail address:</label>#}
-{#            {{ form.email }}#}
-{#        </div>#}
-{#        <div class="field">#}
-{#            {{ form.message.errors }}#}
-{#            <label for="id_message">Message:</label>#}
-{#            {{ form.message }}#}
-{#        </div>#}
-    </table>
+    {{ form.as_p }}
 	<br>
 	<div><input type="submit" id="id_submit_income"> <input type="button" value="Cancel" onclick="window.location='http://localhost:8000/income/'" id="id_cancel_income"></div>
 </form>

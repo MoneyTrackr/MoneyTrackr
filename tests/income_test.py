@@ -145,7 +145,7 @@ class IncomeTest(StaticLiveServerTestCase):
         input_notes =  self.browser.find_element_by_id('id_notes')
         input_notes.send_keys('family treat')
 
-        add_expense_button = self.browser.find_element_by_id('id_income_expense')
+        add_expense_button = self.browser.find_element_by_id('id_submit_income')
         add_expense_button.click()
 
         self.browser.implicitly_wait(10)
@@ -322,7 +322,7 @@ class IncomeTest(StaticLiveServerTestCase):
 
 #16 Edit
 
-    def test_detects_account_is_invalid_on_add(self):
+    def test_detects_account_is_invalid_on_edit(self):
         income = Income.objects.latest('id')
         self.browser.get('http://localhost:8081/income')
         edit_income_link = self.browser.find_element_by_id("edit-income-"+ str(income.id))

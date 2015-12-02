@@ -5,6 +5,7 @@ from selenium import webdriver
 from application.models import Expense
 from application.models import Category
 from application.models import Account
+from selenium.webdriver.common.keys import Keys
 
 import datetime
 
@@ -102,7 +103,6 @@ class ExpenseTest(StaticLiveServerTestCase):
         add_expense_button.click()
 
         self.browser.implicitly_wait(10)
-        self.assertIn('Expense List', self.browser.title)
 
         self.assertIn('family treat', self.browser.page_source)
         self.assertIn('savings', self.browser.page_source)
@@ -261,32 +261,152 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('Expense List', self.browser.title)
         self.assertNotIn('family treat', self.browser.page_source)
 
-    def test_system_notify_user_of_correct_update(self):
-        self.browser.get('http://localhost:8081/expense/edit')
-        self.assertIn('The expense update list has been updated', response.content)
 
-    def test_blank_fields_when_submit(self):
+    def test_detects_date_is_invalid_on_edit(self):
         expense = Expense.objects.latest('id')
         self.browser.get('http://localhost:8081/expense')
         edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
         edit_expense_link.click()
 
-        self.browser.find_element_by_id('id_update_expense').send_keys('\n')
-        error = self.browser.find_element_by_css_selector('has-error')
-        self.assertEqual(error.text, "You can't have an empty list item")
-        self.browser.find_element_by_id('id_date').send_keys('\n')
-        self.check_for_row_in_list_table('12/25/2015')
-        error = self.browser.find_element_by_css_selector('has-error')
-        self.assertEqual(error.text, "You can't have an empty list item")
-        self.browser.find_element_by_id('id_category').send_keys('\n')
-        self.check_for_row_in_list_table('others')
-        error = self.browser.find_element_by_css_selector('has-error')
-        self.assertEqual(error.text, "You can't have an empty list item")
-        self.browser.find_element_by_id('id_account').send_keys('\n')
-        self.check_for_row_in_list_table('savings')
-        error = self.browser.find_element_by_css_selector('has-error')
-        self.assertEqual(error.text, "You can't have an empty list item")
-        self.browser.find_element_by_id('id_notes').send_keys('\n')
-        self.check_for_row_in_list_table('family treat')
-                
+        input_date =  self.browser.find_element_by_id('id_date')
+
+        input_date.send_keys((Keys.COMMAND, "a"));
+        input_date.send_keys("\b");
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_expense')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+        self.assertIn('This field is required', self.browser.page_source)
+
+
+    def test_detects_category_is_invalid_on_edit(self):
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        # input_category.send_keys('others')
+        input_category.send_keys((Keys.PAGE_UP));
+        input_category.send_keys("\n");
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_expense')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+        self.assertIn('This field is required', self.browser.page_source)
+
+    def test_detects_account_is_invalid_on_edit(self):
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_amount.send_keys('100')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys((Keys.PAGE_UP));
+        input_account.send_keys("\n");
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_expense')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+        self.assertIn('This field is required', self.browser.page_source)
+
+
+
+    def test_detects_amount_is_invalid_on_edits(self):
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
+        input_date =  self.browser.find_element_by_id('id_date')
+        input_date.send_keys('12/25/2015')
+
+        input_category =  self.browser.find_element_by_id('id_category')
+        input_category.send_keys('others')
+
+        input_account =  self.browser.find_element_by_id('id_account')
+        input_account.send_keys('savings')
+
+        input_amount =  self.browser.find_element_by_id('id_amount')
+        input_date.send_keys((Keys.COMMAND, "a"));
+        input_date.send_keys("\b");
+
+        input_notes =  self.browser.find_element_by_id('id_notes')
+        input_notes.send_keys('family treat')
+
+        add_expense_button = self.browser.find_element_by_id('id_submit_expense')
+        add_expense_button.click()
+
+        self.browser.implicitly_wait(10)
+        self.assertIn('This field is required', self.browser.page_source)
+
+
+
+
+    # def test_blank_fields_when_submit(self):
+    #     expense = Expense.objects.latest('id')
+    #     self.browser.get('http://localhost:8081/expense')
+    #     edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+    #     edit_expense_link.click()
+    #
+    #     self.browser.find_element_by_id('id_update_expense').send_keys('\n')
+    #     error = self.browser.find_element_by_css_selector('has-error')
+    #     self.assertEqual(error.text, "You can't have an empty list item")
+    #     self.browser.find_element_by_id('id_date').send_keys('\n')
+    #     self.check_for_row_in_list_table('12/25/2015')
+    #     error = self.browser.find_element_by_css_selector('has-error')
+    #     self.assertEqual(error.text, "You can't have an empty list item")
+    #     self.browser.find_element_by_id('id_category').send_keys('\n')
+    #     self.check_for_row_in_list_table('others')
+    #     error = self.browser.find_element_by_css_selector('has-error')
+    #     self.assertEqual(error.text, "You can't have an empty list item")
+    #     self.browser.find_element_by_id('id_account').send_keys('\n')
+    #     self.check_for_row_in_list_table('savings')
+    #     error = self.browser.find_element_by_css_selector('has-error')
+    #     self.assertEqual(error.text, "You can't have an empty list item")
+    #     self.browser.find_element_by_id('id_notes').send_keys('\n')
+    #     self.check_for_row_in_list_table('family treat')
+    #
 

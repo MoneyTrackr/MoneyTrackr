@@ -79,12 +79,25 @@ def expense_new(request):
     return render(request, 'expense/new.html', {'form': form})
 
 def expense_edit(request, expense_id):
-    try:
-        expense_id = int(expense_id)
-        expense = Expense.objects.get(id=expense_id)
-    except ValueError:
-        raise Http404()
-    return render(request, 'expense/edit.html', {'expense': expense})
+    # try:
+    #     expense_id = int(expense_id)
+    #     expense = Expense.objects.get(id=expense_id)
+    # except ValueError:
+    #     raise Http404()
+    # return render(request, 'expense/edit.html', {'expense': expense})
+
+    expense_id = int(expense_id)
+    post = get_object_or_404(Expense,id=expense_id)
+
+    if request.method == "POST":
+        form = NewExpenseForm(request.POST, instance=post)
+        if form.is_valid():
+            #post = form.save(commit=False)
+            post.save()
+            return HttpResponseRedirect('/expense')
+    else:
+        form = NewExpenseForm(instance=post)
+    return render(request, 'expense/edit.html', {'form': form})
 
 def expense_delete(request, expense_id):
     try:

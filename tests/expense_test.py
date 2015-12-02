@@ -103,33 +103,12 @@ class ExpenseTest(StaticLiveServerTestCase):
 
         self.browser.implicitly_wait(10)
         self.assertIn('Expense List', self.browser.title)
+
         self.assertIn('family treat', self.browser.page_source)
         self.assertIn('savings', self.browser.page_source)
         self.assertIn('others', self.browser.page_source)
         self.assertIn('100', self.browser.page_source)
 
-    def test_cancels_add_expense_successfully(self):
-        self.browser.get('http://localhost:8081/expense/new')
-        input_date =  self.browser.find_element_by_id('id_date')
-        input_date.send_keys('12/25/2015')
-
-        input_category =  self.browser.find_element_by_id('id_category')
-        input_category.send_keys('others')
-
-        input_amount =  self.browser.find_element_by_id('id_amount')
-        input_amount.send_keys('100')
-
-        input_account =  self.browser.find_element_by_id('id_account')
-        input_account.send_keys('savings')
-
-        input_notes =  self.browser.find_element_by_id('id_notes')
-        input_notes.send_keys('family treat')
-
-        cancel_expense_button = self.browser.find_element_by_id('id_cancel_expense')
-        cancel_expense_button.click()
-
-        self.assertIn('Expense List', self.browser.title)
-        self.assertNotIn('family treat', self.browser.page_source)
 
     def test_detects_date_is_invalid_on_add(self):
         self.browser.get('http://localhost:8081/expense/new')

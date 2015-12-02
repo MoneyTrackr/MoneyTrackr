@@ -130,16 +130,19 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertNotIn('family treat', self.browser.page_source)
 
     def test_can_visit_edit_expense_page_(self):
-        self.browser.get('http://localhost:8081/expense/edit')
-        dd_expense_link = self.browser.find_element_by_link_text('Edit Expense')
+       expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
         edit_expense_link.click()
-        self.browser.implicitly_wait(10)
 
-        self.assertIn('New Expense', self.browser.title)
-        self.assertIn('Add Expense Form', self.browser.page_source)
-        
+        self.assertIn('Edit Expense', self.browser.page_source)
+    #
     def test_can_update_expense_from_user_edit(self):
-        self.browser.get('http://localhost:8081/expense/')
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
         input_date =  self.browser.find_element_by_id('id_date')
         input_date.send_keys('12/25/2015')
 
@@ -165,9 +168,13 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('savings', self.browser.page_source)
         self.assertIn('others', self.browser.page_source)
         self.assertIn('100', self.browser.page_source)
-        
+
     def test_cancels_update_expense(self):
-        self.browser.get('http://localhost:8081/expense/edit')
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
         input_date =  self.browser.find_element_by_id('id_date')
         input_date.send_keys('12/25/2015')
 
@@ -194,8 +201,12 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertIn('The expense update list has been updated', response.content)
 
     def test_blank_fields_when_submit(self):
-        self.browser.get(self.server_url) 
-        self.browser.find_element_by_id('id_submit_expense').send_keys('\n')
+        expense = Expense.objects.latest('id')
+        self.browser.get('http://localhost:8081/expense')
+        edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
+        edit_expense_link.click()
+
+        self.browser.find_element_by_id('id_update_expense').send_keys('\n')
         error = self.browser.find_element_by_css_selector('has-error')
         self.assertEqual(error.text, "You can't have an empty list item")
         self.browser.find_element_by_id('id_date').send_keys('\n')
@@ -219,30 +230,30 @@ class ExpenseTest(StaticLiveServerTestCase):
     
 
 
-   def test_add_expense_valid_data(self):
-      form = NewExpenseForm(
-            'date': "2015-12-01",
-            'category': "food",
-            'amount': "100.0",
-            'account': "savings",
-            'notes': "none",                 
-    }, entry=self.entry)		
-    self.assertTrue(form.is_valid())
-    Expense = form.save()
-    self.assertEqual(Expense.date, "2015-12-01")
-    self.assertEqual(Expense.category, "food")
-    self.assertEqual(Expense.amount, "100.0")
-    self.assertEqual(Expense.account, "savings")
-    self.assertEqual(Expense.notes, "none")
-    self.assertEqual(Expense.entry, self.entry)
-
-    def test_add_expense_blank_data(self):
-        form = NewExpenseForm({}, entry=self.entry)
-        self.assertFalse(form.is_valid())
-        self.assettEqual(form.errors,{
-            'date': ['required']',
-            'category': ['required']',
-            'amount': ['required']',
-            'account': ['required']',
-            'notes': ['required']',
-        })
+   # def test_add_expense_valid_data(self):
+   #    form = NewExpenseForm(
+   #          'date': "2015-12-01",
+   #          'category': "food",
+   #          'amount': "100.0",
+   #          'account': "savings",
+   #          'notes': "none",
+   #  }, entry=self.entry)
+   #  self.assertTrue(form.is_valid())
+   #  Expense = form.save()
+   #  self.assertEqual(Expense.date, "2015-12-01")
+   #  self.assertEqual(Expense.category, "food")
+   #  self.assertEqual(Expense.amount, "100.0")
+   #  self.assertEqual(Expense.account, "savings")
+   #  self.assertEqual(Expense.notes, "none")
+   #  self.assertEqual(Expense.entry, self.entry)
+   #
+   #  def test_add_expense_blank_data(self):
+   #      form = NewExpenseForm({}, entry=self.entry)
+   #      self.assertFalse(form.is_valid())
+   #      self.assettEqual(form.errors,{
+   #          'date': ['required']',
+   #          'category': ['required']',
+   #          'amount': ['required']',
+   #          'account': ['required']',
+   #          'notes': ['required']',
+   #      })

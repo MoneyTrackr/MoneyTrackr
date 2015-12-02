@@ -130,7 +130,7 @@ class ExpenseTest(StaticLiveServerTestCase):
         self.assertNotIn('family treat', self.browser.page_source)
 
     def test_can_visit_edit_expense_page_(self):
-       expense = Expense.objects.latest('id')
+        expense = Expense.objects.latest('id')
         self.browser.get('http://localhost:8081/expense')
         edit_expense_link = self.browser.find_element_by_id("edit-expense-"+ str(expense.id))
         edit_expense_link.click()

@@ -273,6 +273,9 @@ class ExpenseTest(StaticLiveServerTestCase):
         input_date.send_keys((Keys.COMMAND, "a"));
         input_date.send_keys("\b");
 
+        input_date.send_keys((Keys.CONTROL, "a"));
+        input_date.send_keys("\b");
+
         input_category =  self.browser.find_element_by_id('id_category')
         input_category.send_keys('others')
 
@@ -371,6 +374,9 @@ class ExpenseTest(StaticLiveServerTestCase):
 
         input_amount =  self.browser.find_element_by_id('id_amount')
         input_date.send_keys((Keys.COMMAND, "a"));
+        input_date.send_keys("\b");
+
+        input_date.send_keys((Keys.CONTROL, "a"));
         input_date.send_keys("\b");
 
         input_notes =  self.browser.find_element_by_id('id_notes')
